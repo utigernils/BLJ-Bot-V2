@@ -5,6 +5,14 @@ from dateutil import parser
 import random
 import asyncio
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+AI_API_KEY = os.getenv("AI_API_KEY")
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -25,7 +33,7 @@ PRODUKTE = [
 EMOJIS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
 
 def get_weather(city):
-    api_key = "XXX"
+    api_key = "WEATHER_API_KEY"
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
     response = requests.get(url).json()
     if response.get("cod") != 200:
@@ -100,7 +108,7 @@ async def clear(interaction: discord.Interaction, anzahl: int):
 
 @bot.tree.command(name="ki", description="Stelle der KI eine Frage.")
 async def ask_ai(interaction: discord.Interaction, frage: str):
-    api_key = "XXX"
+    api_key = "AI_API_KEY"
     url = "https://ai.utigernils.ch/api.php"
 
     headers = {"Content-Type": "application/json"}
@@ -232,4 +240,4 @@ async def on_reaction_add(reaction: discord.Reaction, user: discord.User):
         channel = reaction.message.channel
         await channel.send(embed=embed)
 
-bot.run("XXX")
+bot.run(DISCORD_TOKEN)
